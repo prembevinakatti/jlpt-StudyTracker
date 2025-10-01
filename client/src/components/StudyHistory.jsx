@@ -7,7 +7,7 @@ const StudyHistory = () => {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const res = await axios.get("http://localhost:3000/api/logs/getLogs", {
+      const res = await axios.get("https://jlpt-studytracker.onrender.com/api/logs/getLogs", {
         withCredentials: true,
       });
       setLogs(res.data.logs);

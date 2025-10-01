@@ -27,13 +27,13 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const logsRes = await axios.get(
-          "http://localhost:3000/api/logs/getLogs",
+          "https://jlpt-studytracker.onrender.com/api/logs/getLogs",
           { withCredentials: true }
         );
         setLogs(logsRes.data.logs);
 
         const statsRes = await axios.get(
-          "http://localhost:3000/api/logs/stats",
+          "https://jlpt-studytracker.onrender.com/api/logs/stats",
           { withCredentials: true }
         );
         setStats(statsRes.data.stats);

@@ -28,7 +28,7 @@ const AddStudyLog = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/logs/createLog",
+        "https://jlpt-studytracker.onrender.com/api/logs/createLog",
         {
           category: form.category,
           notes: form.notes,

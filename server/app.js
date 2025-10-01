@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "https://expenzo-q1hu.onrender.com",
+  "https://jlpt-studytracker-1.onrender.com",
   "capacitor://localhost",
   "http://localhost",
   "https://localhost",
