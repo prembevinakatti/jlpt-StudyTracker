@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddStudyLog = () => {
   const [form, setForm] = useState({
@@ -10,7 +11,6 @@ const AddStudyLog = () => {
     notes: "",
     date: "",
   });
-  const [message, setMessage] = useState("");
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,7 +22,9 @@ const AddStudyLog = () => {
       (Number(form.hours) || 0) * 60 + (Number(form.minutes) || 0);
 
     if (!form.category || totalMinutes === 0 || !form.date) {
-      setMessage("Please fill category, time spent, and date");
+      toast.error("Please fill category, time spent, and date", {
+        duration: 3000, // auto close
+      });
       return;
     }
 
@@ -47,11 +49,14 @@ const AddStudyLog = () => {
             : `${hours}h`
           : `${minutes}m`;
 
-      setMessage(`Study Log Added! Time spent: ${timeSpent}`);
+      toast.success(`Study Log Added! Time spent: ${timeSpent}`, {
+        duration: 4000,
+      });
+
       setForm({ category: "", hours: "", minutes: "", notes: "", date: "" });
     } catch (err) {
       console.log("Error : ", err);
-      setMessage(err.response?.data?.message || "Error");
+      toast.error(err.response?.data?.message || "Error", { duration: 3000 });
     }
   };
 
@@ -62,8 +67,6 @@ const AddStudyLog = () => {
         <h2 className="text-3xl font-bold text-purple-700 mb-6">
           Add Study Log
         </h2>
-
-        {message && <p className="text-green-600 mb-4">{message}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <select
@@ -119,6 +122,9 @@ const AddStudyLog = () => {
           </button>
         </form>
       </div>
+
+      {/* Toaster Container */}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
