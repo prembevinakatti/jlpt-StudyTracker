@@ -19,7 +19,7 @@ const LoginPage = () => {
         { withCredentials: true }
       );
 
-      toast.success(res.data.message);
+      toast.success(res.data.message, { duration: 3000 });
       navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.message || "Error"); // show error toast
