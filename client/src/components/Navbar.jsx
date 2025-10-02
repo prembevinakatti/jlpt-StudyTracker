@@ -1,49 +1,47 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, LogOut } from "lucide-react"; // added logout icon
+import { Menu, X, LogOut } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Dummy logout handler (replace with real logic later)
+  // Logout handler (extend with clearing tokens/cookies later)
   const handleLogout = () => {
-    navigate("/");
+    // Example: localStorage.removeItem("token");
+    navigate("/login");
     console.log("User logged out!");
-    // e.g. clear token, redirect to login page
   };
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-16 items-center">
           {/* Logo / App Name */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-2xl font-bold text-purple-600">
-              BenkyōLog
-            </Link>
-          </div>
+          <Link to="/" className="text-2xl font-bold text-purple-600">
+            BenkyōLog
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 items-center">
-            <p
-              onClick={() => navigate("dashboard")}
+            <button
+              onClick={() => navigate("/dashboard")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Dashboard
-            </p>
-            <p
-              onClick={() => navigate("addLogs")}
+            </button>
+            <button
+              onClick={() => navigate("/addLogs")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Add Log
-            </p>
-            <p
-              onClick={() => navigate("history")}
+            </button>
+            <button
+              onClick={() => navigate("/history")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Log History
-            </p>
+            </button>
 
             {/* Logout Icon */}
             <button
@@ -56,7 +54,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center">
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 hover:text-purple-600 focus:outline-none"
@@ -79,14 +77,14 @@ const Navbar = () => {
               Dashboard
             </Link>
             <Link
-              to="/add-log"
+              to="/addLogs"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Add Log
             </Link>
             <Link
-              to="/log-history"
+              to="/history"
               onClick={() => setIsOpen(false)}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
