@@ -44,6 +44,7 @@ const Dashboard = () => {
 
   // ✅ Convert minutes → formatted string like "1h 20m"
   const formatMinutes = (minutes) => {
+    if (!minutes || minutes <= 0) return "0m";
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
     if (h > 0 && m > 0) return `${h}h ${m}m`;
@@ -51,10 +52,13 @@ const Dashboard = () => {
     return `${m}m`;
   };
 
-  // ✅ For summary card total hours (show in h+m)
-  const totalMinutes = logs?.reduce((sum, log) => sum + log.totalMinutes, 0);
+  // ✅ Calculate total minutes correctly
+  const totalMinutes = logs?.reduce(
+    (sum, log) => sum + (log.totalMinutes || 0),
+    0
+  );
 
-  // ✅ Daily chart data (keep minutes, format only in tooltip)
+  // ✅ Daily chart data
   const dailyData = logs
     .slice()
     .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -106,12 +110,10 @@ const Dashboard = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis
-              tickFormatter={(v) => formatMinutes(v)} // Y-axis in h+m
+              tickFormatter={(v) => formatMinutes(v)}
+              allowDecimals={false}
             />
-            <Tooltip
-              formatter={(value) => formatMinutes(value)}
-              labelStyle={{ fontWeight: "bold" }}
-            />
+            <Tooltip formatter={(value) => formatMinutes(value)} />
             <Legend />
             <Line
               type="monotone"
