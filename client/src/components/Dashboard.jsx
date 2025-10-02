@@ -42,35 +42,31 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  // ✅ Convert minutes → formatted string like "1h 20m"
-  const formatMinutes = (minutes) => {
-    if (!minutes || minutes <= 0) return "0m";
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    if (h > 0 && m > 0) return `${h}h ${m}m`;
-    if (h > 0) return `${h}h`;
-    return `${m}m`;
+  // Convert total minutes to hours and minutes
+  const formatTime = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours && minutes) return `${hours}h ${minutes}m`;
+    if (hours) return `${hours}h`;
+    return `${minutes}m`;
   };
 
-  // ✅ Calculate total minutes correctly
-  const totalMinutes = logs?.reduce(
-    (sum, log) => sum + (log.totalMinutes || 0),
-    0
-  );
+  // Total minutes across all logs
+  const totalMinutes = logs.reduce((sum, log) => sum + Number(log.totalMinutes || 0), 0);
 
-  // ✅ Daily chart data
+  // Daily chart data (keep minutes for LineChart)
   const dailyData = logs
     .slice()
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map((log) => ({
       date: new Date(log.date).toLocaleDateString(),
-      minutes: log.totalMinutes,
+      minutes: Number(log.totalMinutes || 0),
     }));
 
-  // ✅ Category chart data
+  // Category-wise data
   const categoryData = stats?.map((stat) => ({
     name: stat.category,
-    value: stat.totalMinutes,
+    value: Number(stat.totalMinutes || 0),
   }));
 
   return (
@@ -84,19 +80,15 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-2xl shadow-xl hover:scale-105 transition-transform">
           <h2 className="text-lg font-semibold text-purple-600">Total Time</h2>
-          <p className="text-3xl font-bold mt-2">
-            {formatMinutes(totalMinutes)}
-          </p>
+          <p className="text-3xl font-bold mt-2">{formatTime(totalMinutes)}</p>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-xl hover:scale-105 transition-transform">
-          <h2 className="text-lg font-semibold text-purple-600">
-            Study Sessions
-          </h2>
-          <p className="text-3xl font-bold mt-2">{logs?.length}</p>
+          <h2 className="text-lg font-semibold text-purple-600">Study Sessions</h2>
+          <p className="text-3xl font-bold mt-2">{logs.length}</p>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-xl hover:scale-105 transition-transform">
           <h2 className="text-lg font-semibold text-purple-600">Categories</h2>
-          <p className="text-3xl font-bold mt-2">{stats?.length}</p>
+          <p className="text-3xl font-bold mt-2">{stats.length}</p>
         </div>
       </div>
 
@@ -110,10 +102,10 @@ const Dashboard = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis
-              tickFormatter={(v) => formatMinutes(v)}
+              tickFormatter={(val) => formatTime(val)}
               allowDecimals={false}
             />
-            <Tooltip formatter={(value) => formatMinutes(value)} />
+            <Tooltip formatter={(val) => formatTime(val)} />
             <Legend />
             <Line
               type="monotone"
@@ -141,18 +133,13 @@ const Dashboard = () => {
               cx="50%"
               cy="50%"
               outerRadius={100}
-              label={(entry) =>
-                `${entry.name}: ${formatMinutes(entry.value)}`
-              }
+              label={(entry) => `${entry.name}: ${formatTime(entry.value)}`}
             >
               {categoryData?.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => formatMinutes(value)} />
+            <Tooltip formatter={(val) => formatTime(val)} />
           </PieChart>
         </ResponsiveContainer>
       </div>
