@@ -26,24 +26,24 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 items-center">
-            <Link
-              to="/dashboard"
+            <p
+              onClick={() => navigate("dashboard")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Dashboard
-            </Link>
-            <Link
-              to="/addLogs"
+            </p>
+            <p
+              onClick={() => navigate("addLogs")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Add Log
-            </Link>
-            <Link
-              to="/history"
+            </p>
+            <p
+              onClick={() => navigate("history")}
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Log History
-            </Link>
+            </p>
 
             {/* Logout Icon */}
             <button
