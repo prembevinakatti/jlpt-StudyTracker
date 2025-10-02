@@ -6,10 +6,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Logout handler (extend with clearing tokens/cookies later)
+  // Logout handler
   const handleLogout = () => {
     // Example: localStorage.removeItem("token");
-    navigate("/login");
+    setIsOpen(false); // close menu
+    navigate("/login", { replace: true });
     console.log("User logged out!");
   };
 
@@ -24,24 +25,24 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 items-center">
-            <button
-              onClick={() => navigate("/dashboard")}
+            <Link
+              to="/dashboard"
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Dashboard
-            </button>
-            <button
-              onClick={() => navigate("/addLogs")}
+            </Link>
+            <Link
+              to="/addLogs"
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Add Log
-            </button>
-            <button
-              onClick={() => navigate("/history")}
+            </Link>
+            <Link
+              to="/history"
               className="text-gray-700 hover:text-purple-600 font-medium"
             >
               Log History
-            </button>
+            </Link>
 
             {/* Logout Icon */}
             <button
@@ -93,10 +94,7 @@ const Navbar = () => {
 
             {/* Logout in Mobile Menu */}
             <button
-              onClick={() => {
-                setIsOpen(false);
-                handleLogout();
-              }}
+              onClick={handleLogout}
               className="flex items-center space-x-2 text-gray-700 hover:text-red-500 font-medium"
             >
               <LogOut size={20} />
